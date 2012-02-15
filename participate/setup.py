@@ -6,6 +6,7 @@ import os
 import starflyer
 
 import postmeister
+import main
 
 from jinja2 import Environment, PackageLoader, PrefixLoader
 from logbook import Logger
@@ -43,7 +44,7 @@ def setup(**kw):
 
     ## routing
     config.routes.extend([
-        #('/', 'index', main.IndexView),
+        ('/', 'index', main.IndexView),
     ])
 
     ## databases
@@ -54,6 +55,12 @@ def setup(**kw):
 
     ## templates
     config.templates.main.append(PackageLoader("participate","templates"))
+
+    # configure text contents
+    # TODO: make this really i18n, also in starflyer
+    fp = pkg_resources.resource_stream(__name__, 'text.ini')
+    config.i18n.de = yaml.load(fp)                                                                                                                    
+    config.i18n._default = "de"
 
     ## static resources like JS, CSS, images
     static_file_path = pkg_resources.resource_filename(__name__, 'static')
